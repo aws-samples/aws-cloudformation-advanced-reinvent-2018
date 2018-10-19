@@ -1,0 +1,21 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: This CloudFormation StackSet deploys two AWS provided CloudFormation templates that add Administrator and Execution Roles required to use AWSCloudFormationStackSetAdministrationRole
+Resources:
+  AWSCloudFormationStackSetAdministrationRole:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://s3.amazonaws.com/cloudformation-stackset-sample-templates-us-east-1/AWSCloudFormationStackSetAdministrationRole.yml 
+      TimeoutInMinutes: '3'
+  AWSCloudFormationStackSetExecutionRole:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://s3.amazonaws.com/cloudformation-stackset-sample-templates-us-east-1/AWSCloudFormationStackSetExecutionRole.yml 
+      TimeoutInMinutes: '3'
+      Parameters:
+        AdministratorAccountId : !Ref 'AccountID'
+Parameters:
+  AccountID:
+      Type: String
+      Description: Your AWS Account ID
+      MaxLength: 12
+      MinLength: 12

@@ -1,0 +1,112 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AutoGenerateSSHKey
+Description: "This template will be transformed by the macro"
+Parameters:
+  SourceAccessCIDR:
+    Type: String
+    Description: The CIDR IP range that is permitted to access the instance. We recommend that you set this value to a trusted IP range.
+    Default: 0.0.0.0/0
+  VPCPublicSubnet:
+    Type: AWS::EC2::Subnet::Id
+    Description: Choose a public subnet in the selected VPC
+  VPC:
+    Type: AWS::EC2::VPC::Id
+    Description: The VPC in which to launch the EC2 instance. We recommend you choose your default VPC.
+  FunctionArn:
+    Type: String
+    Description: The ARN of the lambda function that implements the custom resource and macro
+Resources:
+  MyEC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      # A key called MyKey01 will be created by a custom resource that is 
+      # injected into this template when the transform macro runs
+      KeyName: AutoGenerate-MyKey01
+      InstanceType: t2.micro
+      ImageId: ami-04681a1dbd79675a5
+      IamInstanceProfile: !Ref EC2InstanceProfile
+      SecurityGroupIds:
+        - !Ref EC2InstanceSG
+      SubnetId: !Ref VPCPublicSubnet
+      Tags:
+        -
+          Key: Name
+          Value: Cfn-Workshop-Reinvent-2018-Lab2
+  EC2InstanceProfile:
+      Type: AWS::IAM::InstanceProfile
+      Properties:
+        Roles:
+        - Ref: EC2InstanceRole
+        Path: "/"
+      DependsOn: EC2InstanceRole
+  EC2InstanceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      Policies:
+      - PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Action:
+            - s3:GetObject
+            Resource: "*"
+            Effect: Allow
+        PolicyName: s3-policy
+      - PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Action:
+            - logs:CreateLogStream
+            - logs:GetLogEvents
+            - logs:PutLogEvents
+            - logs:DescribeLogGroups
+            - logs:DescribeLogStreams
+            - logs:PutRetentionPolicy
+            - logs:PutMetricFilter
+            - logs:CreateLogGroup
+            Resource:
+            - arn:aws:logs:*:*:*
+            - arn:aws:s3:::*
+            Effect: Allow
+        PolicyName: cloudwatch-logs-policy
+      - PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Action:
+            - ec2:AssociateAddress
+            - ec2:DescribeAddresses
+            Resource:
+            - "*"
+            Effect: Allow
+        PolicyName: eip-policy
+      Path: "/"
+      AssumeRolePolicyDocument:
+        Statement:
+        - Action:
+          - sts:AssumeRole
+          Principal:
+            Service:
+            - ec2.amazonaws.com
+          Effect: Allow
+        Version: '2012-10-17'
+  EC2InstanceSG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+        GroupDescription: This should allow you to SSH to the instance from your location
+        VpcId: !Ref VPC
+        Tags:
+        - Key: Name
+          Value: !Sub ${AWS::StackName}
+        SecurityGroupIngress:
+          -
+            Description: This should allow you to SSH from your location into an EC2 instance
+            CidrIp: !Ref SourceAccessCIDR
+            FromPort: 22
+            IpProtocol: tcp
+            ToPort: 22
+Outputs:
+  MyEC2InstanceDNSName:
+    Description: The DNSName of the new EC2 instance
+    Value: !GetAtt MyEC2Instance.PublicDnsName
+  MyEC2InstanceIP:
+    Description: The IP address of the EC2 instance
+    Value: !GetAtt MyEC2Instance.PublicIp

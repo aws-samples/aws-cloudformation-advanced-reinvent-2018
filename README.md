@@ -5,3 +5,7 @@ Lab Materials for re:Invent 2018 workshop - Hands on with Advanced CloudFormatio
 ## License Summary
 
 This sample code is made available under a modified MIT license. See the LICENSE file.
+
+## The Lab
+
+See [Instructions.md](Instructions.md)

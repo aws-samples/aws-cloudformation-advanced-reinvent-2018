@@ -1,0 +1,82 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: This YAML template provisions an Amazon Linux 2 AMI and installs httpd to demonstrate proper operation in various AWS regions
+Parameters:
+    SourceAccessCIDR:
+      Type: String
+      Description: The CIDR IP range that is permitted to access the instance. We recommend that you set this value to a trusted IP range.
+      Default: 0.0.0.0/0
+Mappings:
+# Mapping of Amazon Linux 2 AMI IDs in every AWS Region
+# When deploying a StackSet, the template will automatically deploy the proper AMI in each selected region
+  RegionMap:
+    us-east-1: 
+      AMI: ami-04681a1dbd79675a5
+    us-east-2: 
+      AMI: ami-0cf31d971a3ca20d6
+    us-west-1:
+      AMI: ami-0782017a917e973e7
+    us-west-2:
+      AMI: ami-6cd6f714
+    ap-south-1:
+      AMI: ami-00b6a8a2bd28daf19
+    ap-northeast-3:
+      AMI: ami-00f7ef6bf92e8f916
+    ap-northeast-2:
+      AMI: ami-012566705322e9a8e
+    ap-southeast-1:
+      AMI: ami-01da99628f381e50a
+    ap-southeast-2:
+      AMI: ami-00e17d1165b9dd3ec
+    ap-northeast-1:
+      AMI: ami-08847abae18baa040
+    ca-central-1:
+      AMI: ami-ce1b96aa
+    eu-central-1:
+      AMI: ami-0f5dbc86dd9cbf7a8
+    eu-west-1:
+      AMI: ami-0bdb1d6c15a40392c
+    eu-west-2:
+      AMI: ami-e1768386
+    eu-west-3:
+      AMI: ami-06340c8c12baa6a09
+    sa-east-1:
+      AMI: ami-0ad7b0031d41ed4b9
+Resources:
+  MyEC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: t2.micro
+      ImageId: !FindInMap
+      # !FindInMap will search the above RegionMap and automatically pick the proper AMI ID based on the region where this templte is being deployed
+        - RegionMap
+        - !Ref 'AWS::Region'
+        - AMI
+      SecurityGroupIds:
+        - !Ref EC2InstanceSG
+      UserData:
+        'Fn::Base64': !Sub |
+          #!/bin/bash -ex
+          sudo yum install httpd -y
+          echo '<html><h1>Your CloudFormation stack successfully deployed in ${AWS::Region}!</h1></html>' >/var/www/html/index.html
+          service httpd start
+      Tags:
+        - Key: Name
+          Value: !Sub ${AWS::StackName}
+  EC2InstanceSG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+        GroupDescription: This SG allows you to verify the webserver is operational by allowing HTTP (TCP 80) traffic from your location
+        Tags:
+        - Key: Name
+          Value: !Sub ${AWS::StackName}
+        SecurityGroupIngress:
+          -
+            Description: Permits HTTP traffic to validate that the installed webserver is operational.
+            CidrIp: !Ref SourceAccessCIDR
+            FromPort: 80
+            IpProtocol: tcp
+            ToPort: 80
+Outputs:
+  Website:
+    Description: Webserver URL
+    Value: !Sub 'http://${MyEC2Instance.PublicDnsName}'

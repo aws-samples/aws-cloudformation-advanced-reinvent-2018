@@ -1,0 +1,13 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "This template creates the macro"
+Parameters:
+  FunctionArn:
+    Type: String
+Resources:
+  SSHKeyMacro:
+    Type: AWS::CloudFormation::Macro
+    Properties:
+      Name: AutoGenerateSSHKey
+      # Paste in the ARN for the function when you create the stack
+      FunctionName: !Ref FunctionArn
+      
