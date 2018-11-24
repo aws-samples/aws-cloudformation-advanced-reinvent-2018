@@ -1,0 +1,17 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Resources: 
+  InputQueue: 
+    Type: "AWS::SQS::Queue"
+    Properties: 
+      QueueName: "DriftLab-InputQueue"
+      VisibilityTimeout: 30
+      RedrivePolicy: 
+        deadLetterTargetArn: 
+          Fn::GetAtt: 
+            - "DeadLetterQueue"
+            - "Arn"
+        maxReceiveCount: 5
+  DeadLetterQueue: 
+    Type: "AWS::SQS::Queue"
+    Properties: 
+      QueueName: "DriftLab-ErrorQueue"
