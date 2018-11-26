@@ -9,3 +9,7 @@ This sample code is made available under a modified MIT license. See the LICENSE
 ## The Lab
 
 See [Instructions.md](Instructions.md)
+
+## VSCode Setup (Optional Setup)
+
+See [VSCode.md](VSCode.md) for VSCode template code completion and inline validation support 
