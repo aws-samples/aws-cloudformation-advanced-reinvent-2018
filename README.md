@@ -10,6 +10,6 @@ This sample code is made available under a modified MIT license. See the LICENSE
 
 See [Instructions.md](Instructions.md)
 
-## VSCode Setup
+## VSCode Setup (Optional Setup)
 
 See [VSCode.md](VSCode.md) for VSCode template code completion and inline validation support 
