@@ -551,7 +551,7 @@ In this lab, you will create a CloudFormation stack and purposefully make change
 
 2. Click **Create Stack**. 
 
-3. Select **Upload a template to Amazon S3** and upload [drift\my_cfn_stack.yml](my_cfn_stack.yml)
+3. Select **Upload a template to Amazon S3** and upload [drift/my_cfn_stack.yml](drift/my_cfn_stack.yml)
 
     1. The template defines a Stack with two SQS Queues: an input queue and an error queue.
     
