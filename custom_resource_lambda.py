@@ -137,7 +137,7 @@ def custom_resource_handler(event, context):
     if event['RequestType'] == 'Delete':
         #Delete the entry in SSM Parameter store and EC2
         try:
-            print("Deleting key name %s" % str(pem_key_name))
+            print(f"Deleting key name {pem_key_name}")
 
             ssm_client = boto3.client('ssm')
             rm_param = ssm_client.delete_parameter(Name=pem_key_name)
@@ -151,8 +151,7 @@ def custom_resource_handler(event, context):
             print(f"There was an error {e} deleting the key {pem_key_name} ' +\
             from SSM Parameter store or EC2")
             log_exception()
-            #response = 'FAILED'
-            response = 'SUCCESS' # For testing purposes
+            response = 'FAILED'
          
         send_response(event, context, response)
 
