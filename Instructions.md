@@ -153,7 +153,7 @@ In this lab, you will create a custom resource that generates an SSH key and sto
 
 9. Click **Save** to save the function. Copy the ARN at the top right of the screen.
 
-10. ![](arn.png)
+![](arn.png)
 
 11. Go to the CloudFormation console and click **Create Stack**
 
@@ -368,6 +368,8 @@ In this lab, you will create a macro that extends the EC2 resource to automatica
 
 17. Delete the stack and the lambda function
 
+18. *Stretch Goal: Modify the CloudFormation template so that you can specify the key name as a parameter.*
+
 
 
 ## Lab #3 - Mapping and StackSets
@@ -573,7 +575,7 @@ In this lab, you will create a CloudFormation stack and purposefully make change
         Type: "AWS::SQS::Queue"
         Properties: 
         QueueName: "DriftLab-ErrorQueue"
-      ```
+    ```
 
 4. Give the stack a unique name such as drift-lab-with-sqs and **Next**.
 
@@ -604,6 +606,7 @@ In this lab, you will create a CloudFormation stack and purposefully make change
     3. Uncheck **Use Redrive Policy** to delete the redirection to the error queue on consecutive failures.
     4. Click **Save Changes**.
     
+
 *NOTE: You have now made a change in the value of an existing property, added a new property, and deleted an existing property of the InputQueue resource.*
 
 4. Go to the CloudFormation Console.
