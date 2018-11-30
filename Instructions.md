@@ -51,7 +51,7 @@ In this lab, you will create a custom resource that generates an SSH key and sto
               {
                   "Effect": "Allow",
                   "Action": [
-                      "ec2:DeleteKeyPairs",
+                      "ec2:DeleteKeyPair",
                       "ssm:DeleteParameter"
                   ],
                   "Resource": "*"
