@@ -7,7 +7,7 @@ Here is a VSCode setup integration example
 
 **Install VSCode**
 
-1. Install VS [code binary](https://code.visualstudio.com/). Here are links to [Windows](https://aka.ms/win32-user-stable), [macOS](ihttps://go.microsoft.com/fwlink/?LinkID=620882), [linux-debian](ihttps://go.microsoft.com/fwlink/?LinkID=760868)
+1. Install VS [code binary](https://code.visualstudio.com/). Here is the download [link](https://code.visualstudio.com/Download) for Windows, macOS, linux-debian.
 2. Start VSCode, on macOS press CMD+&lt;SPACE&gt; and type __code__
 3. Install [YAML support](https://marketplace.visualstudio.com/items?itemName=redhat.vscode-yaml) for VSCode. Here is the [github repo](https://github.com/redhat-developer/vscode-yaml)
 
