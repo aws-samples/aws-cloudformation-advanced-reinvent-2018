@@ -570,7 +570,7 @@ In this lab, you will create a CloudFormation stack and purposefully make change
             Fn::GetAtt: 
               - "DeadLetterQueue"
               - "Arn"
-            maxReceiveCount: 5
+          maxReceiveCount: 5
       DeadLetterQueue: 
         Type: "AWS::SQS::Queue"
         Properties: 
