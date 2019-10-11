@@ -189,7 +189,7 @@ def macro_handler(event, _):
     key_name = None
     ec2_resource = None
 
-    # Look through resources to find one with type CloudTrailBucket
+    # Look through resources to find one with type EC2::Instance
     for _, r in fragment['Resources'].items():
         if r['Type'] == 'AWS::EC2::Instance':
             for p_name, p in r['Properties'].items():
